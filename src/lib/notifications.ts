@@ -15,8 +15,8 @@ async function notify(title: string, body: string, tag: string) {
   if (!("Notification" in window) || Notification.permission !== "granted") return;
   try {
     const reg = await navigator.serviceWorker?.getRegistration();
-    if (reg) await reg.showNotification(title, { body, tag, icon: "/icon-192.png", badge: "/icon-192.png" });
-    else new Notification(title, { body, tag, icon: "/icon-192.png" });
+    if (reg) await reg.showNotification(title, { body, tag, icon: "icon-192.png", badge: "icon-192.png" });
+    else new Notification(title, { body, tag, icon: "icon-192.png" });
   } catch {
     // Some browsers only allow notifications from a service worker; ignore failures.
   }

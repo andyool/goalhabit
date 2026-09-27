@@ -35,6 +35,15 @@ On first launch, go through onboarding, or choose **Explore with demo data** to 
 
 Every feature is available from the start — no plans, no paywall, no AI, no accounts.
 
+## Put it on your phone
+
+The included GitHub Actions workflow (`.github/workflows/deploy.yml`) builds and publishes the app to GitHub Pages on every push.
+
+1. In the repo on GitHub: **Settings → Pages → Build and deployment → Source: GitHub Actions**.
+2. **Actions → Deploy to GitHub Pages → Run workflow** (or just push a commit).
+3. Open `https://<your-username>.github.io/goalhabit/` on your phone.
+4. iPhone (Safari): **Share → Add to Home Screen**. Android (Chrome): **⋮ → Add to Home screen / Install app**.
+
 ## Project structure
 
 ```
