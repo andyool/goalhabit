@@ -1,10 +1,10 @@
 import { motion } from "motion/react";
-import { ArrowUp, Check, Crown, KeyRound, RotateCcw, Sparkles, Square } from "lucide-react";
+import { ArrowUp, Check, KeyRound, RotateCcw, Sparkles, Square } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Button, Card, cx, IconButton, inputCls, Markdown, PageHeader } from "../components/ui";
 import { MODELS } from "../lib/models";
 import { useStore } from "../lib/store";
-import { navigate, useUI } from "../lib/ui";
+import { navigate } from "../lib/ui";
 
 const STARTERS = [
   "How was my week? Be honest.",
@@ -22,12 +22,11 @@ export function Coach({ prompt }: { prompt?: string }) {
   const pushChat = useStore((s) => s.pushChat);
   const patchChat = useStore((s) => s.patchChat);
   const clearChat = useStore((s) => s.clearChat);
-  const openSheet = useUI((s) => s.openSheet);
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
   const [thinking, setThinking] = useState(false);
   const bottom = useRef<HTMLDivElement>(null);
-  const ready = profile.pro && !!profile.apiKey;
+  const ready = !!profile.apiKey;
 
   useEffect(() => {
     bottom.current?.scrollIntoView({ behavior: "smooth", block: "end" });
@@ -92,20 +91,7 @@ export function Coach({ prompt }: { prompt?: string }) {
         }
       />
 
-      {!profile.pro ? (
-        <Card glow className="p-6 text-center">
-          <div className="mx-auto mb-3 grid h-14 w-14 place-items-center rounded-2xl bg-accent text-white">
-            <Crown size={26} />
-          </div>
-          <h2 className="text-xl font-bold">Your personal discipline Agent</h2>
-          <p className="mx-auto mt-2 max-w-sm text-sm text-fg-2">
-            It watches your progress, spots what's off, and adjusts your plan before you burn out. Ask it to plan goals, tune habits or analyze your week — it acts directly in the app.
-          </p>
-          <Button className="mt-5" onClick={() => openSheet({ type: "paywall", reason: "The AI Agent is part of Pro." })}>
-            Unlock the Agent
-          </Button>
-        </Card>
-      ) : !profile.apiKey ? (
+      {!profile.apiKey ? (
         <ApiKeySetup />
       ) : (
         <>

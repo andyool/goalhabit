@@ -16,7 +16,6 @@ const defaultProfile = (): Profile => ({
   name: "",
   areas: [],
   onboarded: false,
-  pro: false,
   theme: "dark",
   apiKey: "",
   model: DEFAULT_MODEL,
@@ -47,8 +46,6 @@ export type HabitInput = Omit<Habit, "id" | "targetHistory" | "createdAt" | "arc
 export type GoalInput = Omit<Goal, "id" | "entries" | "milestones" | "createdAt" | "archived" | "order" | "completedAt"> & {
   milestones?: (Omit<Milestone, "id" | "done"> & { done?: boolean })[];
 };
-
-export const FREE_GOAL_LIMIT = 2;
 
 export function habitFromTemplate(t: HabitTemplate, goalId?: ID): HabitInput {
   return {

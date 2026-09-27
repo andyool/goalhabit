@@ -9,7 +9,7 @@ import { z } from "zod";
 import { addDays, todayKey } from "./date";
 import { COLOR_KEYS } from "./content";
 import { coachContext } from "./insights";
-import { FREE_GOAL_LIMIT, snapshot, useStore } from "./store";
+import { snapshot, useStore } from "./store";
 import type { ColorKey, HabitSchedule } from "./types";
 import { APP_NAME } from "./brand";
 
@@ -209,9 +209,6 @@ function runTool(name: string, raw: unknown): { result: unknown; action?: string
 
     case "create_goal": {
       const i = parsed.data as z.infer<typeof Inputs.create_goal>;
-      const active = s.goals.filter((g) => !g.archived && !g.completedAt).length;
-      if (!s.profile.pro && active >= FREE_GOAL_LIMIT)
-        return { result: { error: `Free plan allows ${FREE_GOAL_LIMIT} active goals. Tell the user they can upgrade to Pro for unlimited goals, or complete/archive one first.` }, error: true };
       const numeric = i.kind === "numeric";
       const id = s.addGoal({
         title: i.title,

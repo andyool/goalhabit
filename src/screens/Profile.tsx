@@ -1,10 +1,10 @@
-import { BookOpen, ChevronRight, Crown, Repeat, Settings, Swords, Archive } from "lucide-react";
+import { BookOpen, ChevronRight, Repeat, Settings, Swords, Archive } from "lucide-react";
 import type { ReactNode } from "react";
 import { Badge, Card, List, PageHeader, ProgressBar, Ring, Row, SectionTitle } from "../components/ui";
 import { reviewWeekDue } from "../lib/insights";
 import { computeXp, isDoneOn, levelFromXp, lockedIn, LEVEL_TITLES } from "../lib/metrics";
 import { useStore } from "../lib/store";
-import { navigate, useUI } from "../lib/ui";
+import { navigate } from "../lib/ui";
 
 function MenuRow({ icon, label, sub, onClick, badge }: { icon: ReactNode; label: string; sub?: string; onClick: () => void; badge?: ReactNode }) {
   return (
@@ -22,7 +22,6 @@ function MenuRow({ icon, label, sub, onClick, badge }: { icon: ReactNode; label:
 
 export function Profile() {
   const state = useStore();
-  const openSheet = useUI((s) => s.openSheet);
   const xp = computeXp(state.habits, state.logs, state.goals, { checkIns: Object.keys(state.checkIns).length, reviews: state.reviews.length, lessons: state.lessonsRead.length });
   const level = levelFromXp(xp);
   const locked = lockedIn(state.habits, state.logs);
@@ -43,11 +42,6 @@ export function Profile() {
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-2">
               <h2 className="truncate text-xl font-bold">{state.profile.name || "You"}</h2>
-              {state.profile.pro && (
-                <Badge tone="accent">
-                  <Crown size={10} /> Pro
-                </Badge>
-              )}
             </div>
             <div className="text-sm text-fg-2">
               Level {level.level} · {level.title}
@@ -74,19 +68,6 @@ export function Profile() {
           ))}
         </div>
       </Card>
-
-      {!state.profile.pro && (
-        <Card onClick={() => openSheet({ type: "paywall" })} className="mt-4 flex items-center gap-3 border-accent/30 p-4">
-          <span className="grid h-10 w-10 place-items-center rounded-xl bg-accent text-white">
-            <Crown size={20} />
-          </span>
-          <div className="flex-1">
-            <div className="font-semibold">Upgrade to Pro</div>
-            <div className="text-xs text-fg-3">Unlimited goals, AI Agent, Deep Analysis</div>
-          </div>
-          <ChevronRight size={18} className="text-fg-3" />
-        </Card>
-      )}
 
       <SectionTitle>Grow</SectionTitle>
       <List>

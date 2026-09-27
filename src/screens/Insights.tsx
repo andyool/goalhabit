@@ -1,16 +1,15 @@
 import { AnimatePresence } from "motion/react";
-import { Crown, Sparkles } from "lucide-react";
+import { Sparkles } from "lucide-react";
 import { useState } from "react";
 import { BarChart, Heatmap, LineChart } from "../components/charts";
 import { HabitIcon, SuggestionCard } from "../components/items";
-import { Button, Card, cx, EmptyState, PageHeader, ProgressBar, Segmented, SectionTitle, Stat } from "../components/ui";
-import { requirePro } from "../lib/actions";
+import { Button, Card, EmptyState, PageHeader, ProgressBar, Segmented, SectionTitle, Stat } from "../components/ui";
 import { COLORS } from "../lib/content";
 import { addDays, rangeKeys, todayKey, WEEKDAYS_SHORT } from "../lib/date";
 import { activeHabits, buildSuggestions, deepAnalysis, type AnalysisItem } from "../lib/insights";
 import { averageFocus, completionHours, dayStats, focusScore, lockedIn, overallPrecision, precisionRate, weekdayPerformance } from "../lib/metrics";
 import { useStore } from "../lib/store";
-import { navigate, useUI } from "../lib/ui";
+import { navigate } from "../lib/ui";
 import { APP_NAME } from "../lib/brand";
 
 type Range = "7" | "30" | "90";
@@ -29,7 +28,6 @@ function Delta({ now, before, suffix = "" }: { now: number | null; before: numbe
 
 export function Insights() {
   const state = useStore();
-  const openSheet = useUI((s) => s.openSheet);
   const [range, setRange] = useState<Range>("30");
   const today = todayKey();
   const n = Number(range);
@@ -38,7 +36,6 @@ export function Insights() {
   const prevTo = addDays(from, -1);
   const all = state.habits;
   const habits = activeHabits(all);
-  const pro = state.profile.pro;
 
   const data = {
       focus: averageFocus(all, state.logs, from, today),
@@ -68,7 +65,7 @@ export function Insights() {
   }
 
   const hourBars = data.hours.map((v, h) => ({
-    label: h % 6 === 0 ? new Date(2000, 0, 1, h).toLocaleTimeString(undefined, { hour: "numeric" }) : "",
+    label: h % 6 === 0 && h > 0 ? new Date(2000, 0, 1, h).toLocaleTimeString(undefined, { hour: "numeric" }) : "",
     value: v,
     tip: new Date(2000, 0, 1, h).toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" }),
   }));
@@ -143,13 +140,13 @@ export function Insights() {
 
       <SectionTitle>
         <span className="flex items-center gap-1.5">
-          Deep Analysis {!pro && <Crown size={12} className="text-accent-2" />}
+          Deep Analysis
         </span>
       </SectionTitle>
       <div className="space-y-5">
-        <AnalysisGroup title="Trends" items={data.analysis.trends} locked={false} />
-        <AnalysisGroup title="Patterns" items={data.analysis.patterns} locked={!pro} onUnlock={() => openSheet({ type: "paywall", reason: "Deep Analysis is part of Pro." })} />
-        <AnalysisGroup title="Tips" items={data.analysis.tips} locked={!pro} onUnlock={() => openSheet({ type: "paywall", reason: "Deep Analysis is part of Pro." })} />
+        <AnalysisGroup title="Trends" items={data.analysis.trends} />
+        <AnalysisGroup title="Patterns" items={data.analysis.patterns} />
+        <AnalysisGroup title="Tips" items={data.analysis.tips} />
       </div>
 
       <SectionTitle>Best days</SectionTitle>
@@ -158,19 +155,10 @@ export function Insights() {
       </Card>
 
       <SectionTitle>
-        <span className="flex items-center gap-1.5">When you get things done {!pro && <Crown size={12} className="text-accent-2" />}</span>
+        <span className="flex items-center gap-1.5">When you get things done</span>
       </SectionTitle>
-      <Card className="relative overflow-hidden px-3 pb-2 pt-4">
-        <div className={cx(!pro && "pointer-events-none blur-sm")}>
-          <BarChart height={130} bars={hourBars} format={(v) => `${v} completions`} />
-        </div>
-        {!pro && (
-          <div className="absolute inset-0 grid place-items-center">
-            <Button size="sm" onClick={() => openSheet({ type: "paywall", reason: "See your peak hours with Pro." })}>
-              <Crown size={14} /> Unlock peak hours
-            </Button>
-          </div>
-        )}
+      <Card className="px-3 pb-2 pt-4">
+        <BarChart height={130} bars={hourBars} format={(v) => `${v} completions`} />
       </Card>
 
       <Button
@@ -179,9 +167,7 @@ export function Insights() {
         size="lg"
         className="mt-6"
         onClick={() =>
-          requirePro("AI Agent chat is a Pro feature.", () =>
-            navigate({ name: "coach", prompt: "Give me a deep analysis of my last 30 days: what's working, what's slipping, and the 3 highest-leverage changes. Apply the changes you're confident about." }),
-          )
+          navigate({ name: "coach", prompt: "Give me a deep analysis of my last 30 days: what's working, what's slipping, and the 3 highest-leverage changes. Apply the changes you're confident about." })
         }
       >
         <Sparkles size={18} /> Ask your Agent for a full analysis
@@ -190,14 +176,13 @@ export function Insights() {
   );
 }
 
-function AnalysisGroup({ title, items, locked, onUnlock }: { title: string; items: AnalysisItem[]; locked: boolean; onUnlock?: () => void }) {
+function AnalysisGroup({ title, items }: { title: string; items: AnalysisItem[] }) {
   if (!items.length) return null;
-  const visible = locked ? items.slice(0, 1) : items;
   return (
     <div>
       <div className="mb-2 px-1 text-xs font-semibold text-fg-2">{title}</div>
       <div className="card divide-y divide-line-soft overflow-hidden">
-        {visible.map((it, i) => (
+        {items.map((it, i) => (
           <div key={i} className="flex gap-3 p-4">
             <span className="text-xl">{it.icon}</span>
             <div>
@@ -206,11 +191,6 @@ function AnalysisGroup({ title, items, locked, onUnlock }: { title: string; item
             </div>
           </div>
         ))}
-        {locked && items.length > 1 && (
-          <button type="button" onClick={onUnlock} className="flex w-full items-center justify-center gap-1.5 p-3.5 text-sm font-semibold text-accent-2">
-            <Crown size={14} /> {items.length - 1} more {title.toLowerCase()} with Pro
-          </button>
-        )}
       </div>
     </div>
   );

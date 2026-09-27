@@ -14,7 +14,6 @@ It's a mobile-first installable web app (PWA). All data stays on the device.
 | **Insights** | Focus Score trend, blue consistency heatmap, precision ranking, Agent actions (one-tap fixes), Deep Analysis (trends, patterns, tips), best weekdays, peak hours, mood/energy correlations |
 | **Agent** | Chat with Claude, which can see your stats and act through tools: create goals and habits, change targets and schedules, add or complete milestones, log progress |
 | **Growth** | Weekly review ritual, challenges (75 Soft, Monk Mode, 5AM Club and more), lessons on discipline, XP and levels, activity feed |
-| **Plans** | Free (2 active goals, core insights) and Pro (unlimited goals, Agent, Deep Analysis, all challenges). Payments aren't wired up, so Pro unlocks locally |
 | **App** | Dark and light themes, desktop sidebar layout, offline service worker, notifications, JSON export/import, demo data |
 
 ### How the scores work
@@ -37,14 +36,14 @@ On first launch, go through onboarding, or choose **Explore with demo data** to 
 
 ### AI Agent
 
-The Agent needs Pro (unlocked locally) and an Anthropic API key. Add the key in **Settings → AI Agent** or on the Agent tab. The key is stored only in the browser and requests go directly to the Anthropic API. The default model is Claude Opus 5, and you can switch to Sonnet 5 or Haiku 4.5.
+Every feature is available from the start, with no plans or paywall. The Agent only needs an Anthropic API key. Add the key in **Settings → AI Agent** or on the Agent tab. The key is stored only in the browser and requests go directly to the Anthropic API. The default model is Claude Opus 5, and you can switch to Sonnet 5 or Haiku 4.5.
 
 ## Project structure
 
 ```
 src/
   lib/          data model, store (zustand + localStorage), scoring engine, insights/agent rules, Claude client
-  components/   UI kit, charts (SVG), list items, bottom sheets (forms, logging, paywall)
+  components/   UI kit, charts (SVG), list items, bottom sheets (forms, logging)
   screens/      Today, Goals, GoalDetail, HabitDetail, Insights, Coach, Profile, Review, Challenges, Learn, Settings, Onboarding
 public/         PWA manifest, service worker, icons
 ```

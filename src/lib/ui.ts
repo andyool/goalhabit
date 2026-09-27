@@ -112,8 +112,7 @@ export type Sheet =
   | { type: "habit"; id?: ID; goalId?: ID }
   | { type: "goal"; id?: ID }
   | { type: "log"; habitId: ID; day: string }
-  | { type: "goalEntry"; goalId: ID }
-  | { type: "paywall"; reason?: string };
+  | { type: "goalEntry"; goalId: ID };
 
 export interface Toast {
   id: number;

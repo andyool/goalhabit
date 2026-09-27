@@ -1,4 +1,3 @@
-import { Crown } from "lucide-react";
 import { useState } from "react";
 import { WeekDots } from "../components/charts";
 import { HabitIcon } from "../components/items";
@@ -9,9 +8,7 @@ import { addDays, diffDays, rangeKeys, todayKey } from "../lib/date";
 import { dayStats } from "../lib/metrics";
 import { useStore } from "../lib/store";
 import type { JoinedChallenge } from "../lib/types";
-import { toast, useUI } from "../lib/ui";
-
-const FREE_CHALLENGES = ["10k-steps", "reading-sprint"];
+import { toast } from "../lib/ui";
 
 function useChallengeProgress(c: JoinedChallenge, t: ChallengeTemplate) {
   const allHabits = useStore((s) => s.habits);
@@ -32,17 +29,11 @@ function useChallengeProgress(c: JoinedChallenge, t: ChallengeTemplate) {
 
 export function Challenges() {
   const state = useStore();
-  const openSheet = useUI((s) => s.openSheet);
   const [preview, setPreview] = useState<ChallengeTemplate | null>(null);
   const active = state.challenges.filter((c) => !c.leftAt);
   const activeIds = active.map((c) => c.id);
 
   const join = (t: ChallengeTemplate) => {
-    if (!state.profile.pro && !FREE_CHALLENGES.includes(t.id)) {
-      setPreview(null);
-      openSheet({ type: "paywall", reason: `${t.title} is a Pro challenge.` });
-      return;
-    }
     state.joinChallenge(t.id);
     setPreview(null);
     toast(`${t.emoji} You're in: ${t.title}. ${t.habits.length} habits added to Today.`, "good");
@@ -73,11 +64,6 @@ export function Challenges() {
               <span className="text-4xl">{t.emoji}</span>
               <div className="flex gap-1.5">
                 <Badge>{t.days} days</Badge>
-                {!state.profile.pro && !FREE_CHALLENGES.includes(t.id) && (
-                  <Badge tone="accent">
-                    <Crown size={10} /> Pro
-                  </Badge>
-                )}
               </div>
             </div>
             <div className="p-4">

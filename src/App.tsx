@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from "motion/react";
-import { ChartColumn, Crown, House, Sparkles, Target, User } from "lucide-react";
+import { ChartColumn, House, Sparkles, Target, User } from "lucide-react";
 import { useEffect, type ReactNode } from "react";
 import { Sheets } from "./components/sheets";
 import { cx, Toasts } from "./components/ui";
@@ -7,7 +7,7 @@ import { APP_NAME } from "./lib/brand";
 import { reviewWeekDue } from "./lib/insights";
 import { startBackgroundLoops } from "./lib/notifications";
 import { useStore } from "./lib/store";
-import { navigate, useRoute, useUI, type Route } from "./lib/ui";
+import { navigate, useRoute, type Route } from "./lib/ui";
 import { ArchiveScreen, Goals } from "./screens/Goals";
 import { Challenges } from "./screens/Challenges";
 import { Coach } from "./screens/Coach";
@@ -103,9 +103,7 @@ function Screen({ route }: { route: Route }): ReactNode {
 export default function App() {
   useTheme();
   const onboarded = useStore((s) => s.profile.onboarded);
-  const pro = useStore((s) => s.profile.pro);
   const reviewDue = useStore((s) => !!reviewWeekDue(s));
-  const openSheet = useUI((s) => s.openSheet);
   const route = useRoute();
   const tab = tabFor(route);
 
@@ -145,14 +143,6 @@ export default function App() {
             </button>
           ))}
         </nav>
-        {!pro && (
-          <button type="button" onClick={() => openSheet({ type: "paywall" })} className="glow card mt-auto p-4 text-left">
-            <div className="flex items-center gap-2 font-semibold">
-              <Crown size={16} className="text-accent-2" /> Go Pro
-            </div>
-            <p className="mt-1 text-xs text-fg-3">Unlimited goals, AI Agent and Deep Analysis.</p>
-          </button>
-        )}
       </aside>
 
       <main className="mx-auto w-full max-w-xl px-4 pb-32 md:max-w-2xl md:px-8 md:pb-16">

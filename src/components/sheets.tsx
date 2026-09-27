@@ -1,4 +1,4 @@
-import { Check, Crown, Minus, Plus, Sparkles, Trash, X } from "lucide-react";
+import { Check, Minus, Plus, Sparkles, Trash, X } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { fmtNum, scheduleLabel, targetLabel } from "../lib/actions";
 import { COLORS, COLOR_KEYS, EMOJIS, GOAL_TEMPLATES, QUICK_HABITS, type GoalTemplate, type HabitTemplate } from "../lib/content";
@@ -7,7 +7,7 @@ import { goalCurrent, targetOn, weekCompletions } from "../lib/metrics";
 import { goalFromTemplate, habitFromTemplate, useStore } from "../lib/store";
 import type { ColorKey, GoalKind, GoalTracking, HabitSchedule, TimeOfDay } from "../lib/types";
 import { navigate, toast, useUI, type Sheet } from "../lib/ui";
-import { Badge, BottomSheet, Button, Chip, cx, Field, inputBase, inputCls, Segmented, Toggle } from "./ui";
+import { BottomSheet, Button, Chip, cx, Field, inputBase, inputCls, Segmented, Toggle } from "./ui";
 import { APP_NAME } from "../lib/brand";
 
 export function Sheets() {
@@ -33,9 +33,6 @@ export function Sheets() {
       </BottomSheet>
       <BottomSheet open={sheet?.type === "goalEntry"} onClose={close} title="Update goal">
         {s?.type === "goalEntry" && <GoalEntrySheet key={key} goalId={s.goalId} onDone={close} />}
-      </BottomSheet>
-      <BottomSheet open={sheet?.type === "paywall"} onClose={close} title="">
-        {s?.type === "paywall" && <Paywall reason={s.reason} onDone={close} />}
       </BottomSheet>
     </>
   );
@@ -725,77 +722,3 @@ function GoalEntrySheet({ goalId, onDone }: { goalId: string; onDone: () => void
   );
 }
 
-/* ---------------------------------- Paywall ---------------------------------- */
-
-const PRO_FEATURES = [
-  ["🎯", "Unlimited goals", "Free includes 2 active goals"],
-  ["🤖", "AI Agent & coach chat", "Plans, adjusts and logs for you"],
-  ["🔬", "Deep Analysis", "Peak hours, mood & energy correlations, trends"],
-  ["⚡", "AI Actions", "One-tap optimizations for goals and habits"],
-  ["🏆", "All challenges", "75 Soft, Monk Mode, 5AM Club and more"],
-];
-
-function Paywall({ reason, onDone }: { reason?: string; onDone: () => void }) {
-  const updateProfile = useStore((s) => s.updateProfile);
-  const [plan, setPlan] = useState<"year" | "month">("year");
-  return (
-    <div className="-mt-4 space-y-5">
-      <div className="glow -mx-5 flex flex-col items-center px-6 pb-2 pt-6 text-center">
-        <div className="mb-3 grid h-16 w-16 place-items-center rounded-3xl bg-accent text-white shadow-[0_12px_40px_-8px_var(--accent)]">
-          <Crown size={30} />
-        </div>
-        <h2 className="text-2xl font-bold tracking-tight">{APP_NAME} Pro</h2>
-        <p className="mt-1 text-sm text-fg-2">{reason ?? "Unlock your full discipline system."}</p>
-      </div>
-      <div className="space-y-2.5">
-        {PRO_FEATURES.map(([e, t, d]) => (
-          <div key={t} className="flex items-center gap-3">
-            <span className="grid h-9 w-9 place-items-center rounded-xl bg-card-2 text-lg">{e}</span>
-            <div>
-              <div className="text-sm font-semibold">{t}</div>
-              <div className="text-xs text-fg-3">{d}</div>
-            </div>
-          </div>
-        ))}
-      </div>
-      <div className="grid grid-cols-2 gap-2">
-        {(
-          [
-            ["year", "Yearly", "$34.99", "$2.92/mo · 3-day free trial"],
-            ["month", "Monthly", "$5.99", "Cancel anytime"],
-          ] as const
-        ).map(([id, label, price, sub]) => (
-          <button
-            key={id}
-            type="button"
-            onClick={() => setPlan(id)}
-            className={cx("relative rounded-2xl border p-4 text-left transition", plan === id ? "border-accent bg-accent-soft" : "border-line bg-card-2")}
-          >
-            {id === "year" && (
-              <span className="absolute -top-2.5 right-3">
-                <Badge tone="accent">Save 51%</Badge>
-              </span>
-            )}
-            <div className="text-sm text-fg-2">{label}</div>
-            <div className="text-xl font-bold">{price}</div>
-            <div className="text-[11px] text-fg-3">{sub}</div>
-          </button>
-        ))}
-      </div>
-      <Button
-        full
-        size="lg"
-        onClick={() => {
-          updateProfile({ pro: true, proSince: todayKey() });
-          toast(`Welcome to ${APP_NAME} Pro 👑`, "good");
-          onDone();
-        }}
-      >
-        {plan === "year" ? "Start 3-day free trial" : "Upgrade to Pro"}
-      </Button>
-      <p className="text-center text-[11px] leading-relaxed text-fg-3">
-        Payments aren't connected in this build — Pro unlocks on this device at no cost. You can switch back to Free in Settings.
-      </p>
-    </div>
-  );
-}

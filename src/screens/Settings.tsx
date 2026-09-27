@@ -1,12 +1,11 @@
-import { Bell, Crown, Database, Download, Palette, Sparkles, Trash, Upload, User } from "lucide-react";
+import { Bell, Database, Download, Palette, Sparkles, Trash, Upload, User } from "lucide-react";
 import { useRef, useState, type ReactNode } from "react";
-import { Badge, Button, Card, inputCls, List, PageHeader, Row, SectionTitle, Segmented, Toggle } from "../components/ui";
+import { Button, Card, inputCls, List, PageHeader, Row, SectionTitle, Segmented, Toggle } from "../components/ui";
 import { APP_NAME } from "../lib/brand";
-import { formatDay } from "../lib/date";
 import { requestNotificationPermission } from "../lib/notifications";
 import { snapshot, useStore } from "../lib/store";
 import type { AppState } from "../lib/types";
-import { navigate, toast, useUI } from "../lib/ui";
+import { navigate, toast } from "../lib/ui";
 import { ApiKeySetup } from "./Coach";
 
 function Label({ icon, children }: { icon: ReactNode; children: ReactNode }) {
@@ -20,7 +19,6 @@ function Label({ icon, children }: { icon: ReactNode; children: ReactNode }) {
 export function Settings() {
   const state = useStore();
   const { profile, updateProfile } = state;
-  const openSheet = useUI((s) => s.openSheet);
   const [name, setName] = useState(profile.name);
   const fileRef = useRef<HTMLInputElement>(null);
 
@@ -115,39 +113,12 @@ export function Settings() {
       <SectionTitle>
         <Label icon={<Sparkles size={13} />}>AI Agent</Label>
       </SectionTitle>
-      {profile.pro ? (
-        <>
-          <ApiKeySetup compact />
-          {profile.apiKey && (
-            <button type="button" onClick={() => updateProfile({ apiKey: "" })} className="mt-2 w-full py-2 text-center text-sm font-medium text-bad">
-              Remove API key
-            </button>
-          )}
-        </>
-      ) : (
-        <Card className="p-4 text-sm text-fg-2">The AI Agent is part of Pro.</Card>
+      <ApiKeySetup compact />
+      {profile.apiKey && (
+        <button type="button" onClick={() => updateProfile({ apiKey: "" })} className="mt-2 w-full py-2 text-center text-sm font-medium text-bad">
+          Remove API key
+        </button>
       )}
-
-      <SectionTitle>
-        <Label icon={<Crown size={13} />}>Plan</Label>
-      </SectionTitle>
-      <Card className="flex items-center justify-between gap-3 p-4">
-        <div>
-          <div className="flex items-center gap-2 font-semibold">
-            {profile.pro ? "Pro" : "Free"} {profile.pro && <Badge tone="accent">Active</Badge>}
-          </div>
-          <div className="text-xs text-fg-3">{profile.pro ? `Since ${profile.proSince ? formatDay(profile.proSince, { month: "short", day: "numeric", year: "numeric" }) : "—"}` : "2 goals · core insights"}</div>
-        </div>
-        {profile.pro ? (
-          <Button size="sm" variant="secondary" onClick={() => confirm("Switch back to the Free plan?") && updateProfile({ pro: false })}>
-            Switch to Free
-          </Button>
-        ) : (
-          <Button size="sm" onClick={() => openSheet({ type: "paywall" })}>
-            Upgrade
-          </Button>
-        )}
-      </Card>
 
       <SectionTitle>
         <Label icon={<Database size={13} />}>Data</Label>
@@ -165,9 +136,8 @@ export function Settings() {
           onClick={() => {
             if (!confirm("Load demo data? This replaces everything you have now.")) return;
             const key = profile.apiKey;
-            const pro = profile.pro;
             state.loadDemo();
-            updateProfile({ apiKey: key, pro, theme: profile.theme });
+            updateProfile({ apiKey: key, theme: profile.theme });
             toast("Demo data loaded", "good");
             navigate({ name: "today" }, { replace: true });
           }}

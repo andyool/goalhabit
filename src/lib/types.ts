@@ -123,8 +123,6 @@ export interface Profile {
   name: string;
   areas: string[];
   onboarded: boolean;
-  pro: boolean;
-  proSince?: DateKey;
   theme: "dark" | "light" | "system";
   apiKey: string;
   model: string;

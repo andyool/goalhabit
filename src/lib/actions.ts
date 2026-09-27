@@ -1,7 +1,7 @@
 import { todayKey } from "./date";
 import type { Suggestion } from "./insights";
 import { targetOn } from "./metrics";
-import { FREE_GOAL_LIMIT, useStore } from "./store";
+import { useStore } from "./store";
 import { navigate, toast, useUI } from "./ui";
 
 export function applySuggestion(s: Suggestion) {
@@ -50,20 +50,8 @@ export function toggleHabit(habitId: string, day: string) {
   if (navigator.vibrate) navigator.vibrate(next ? 12 : 6);
 }
 
-export function canAddGoal(): boolean {
-  const { profile, goals } = useStore.getState();
-  if (profile.pro) return true;
-  return goals.filter((g) => !g.archived && !g.completedAt).length < FREE_GOAL_LIMIT;
-}
-
 export function openNewGoal() {
-  if (canAddGoal()) useUI.getState().openSheet({ type: "goal" });
-  else useUI.getState().openSheet({ type: "paywall", reason: `The free plan includes ${FREE_GOAL_LIMIT} active goals.` });
-}
-
-export function requirePro(reason: string, fn: () => void) {
-  if (useStore.getState().profile.pro) fn();
-  else useUI.getState().openSheet({ type: "paywall", reason });
+  useUI.getState().openSheet({ type: "goal" });
 }
 
 export function fmtNum(n: number) {

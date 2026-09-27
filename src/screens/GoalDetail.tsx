@@ -3,7 +3,7 @@ import { useMemo, useState } from "react";
 import { LineChart } from "../components/charts";
 import { HabitIcon, PACE_META, useGoalStats } from "../components/items";
 import { Badge, Button, Card, cx, EmptyState, IconButton, inputCls, List, PageHeader, Ring, Row, SectionTitle } from "../components/ui";
-import { fmtNum, requirePro, scheduleLabel, targetLabel } from "../lib/actions";
+import { fmtNum, scheduleLabel, targetLabel } from "../lib/actions";
 import { COLORS } from "../lib/content";
 import { addDays, diffDays, formatDay, relativeDay, todayKey } from "../lib/date";
 import { goalCurrent, precisionRate, targetOn } from "../lib/metrics";
@@ -141,7 +141,7 @@ function GoalView({ goalId }: { goalId: string }) {
             variant="secondary"
             size="sm"
             className={goal.kind !== "numeric" || goal.completedAt ? "col-span-2" : ""}
-            onClick={() => requirePro("AI Agent chat is a Pro feature.", () => navigate({ name: "coach", prompt: `Review my goal "${goal.title}" (id ${goal.id}). Am I on track, and what should I change this week?` }))}
+            onClick={() => navigate({ name: "coach", prompt: `Review my goal "${goal.title}" (id ${goal.id}). Am I on track, and what should I change this week?` })}
           >
             <Sparkles size={15} /> Ask Agent
           </Button>

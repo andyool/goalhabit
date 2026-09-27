@@ -6,7 +6,7 @@ import { openNewGoal, scheduleLabel, targetLabel } from "../lib/actions";
 import { addDays, todayKey } from "../lib/date";
 import { activeGoals, activeHabits } from "../lib/insights";
 import { habitStreak, precisionRate, targetOn } from "../lib/metrics";
-import { FREE_GOAL_LIMIT, useStore } from "../lib/store";
+import { useStore } from "../lib/store";
 import { navigate, useUI } from "../lib/ui";
 import { APP_NAME } from "../lib/brand";
 
@@ -56,14 +56,6 @@ export function Goals({ tab: initialTab = "goals" }: { tab?: "goals" | "habits" 
             />
           ) : (
             current.map((g) => <GoalCard key={g.id} goal={g} />)
-          )}
-          {!state.profile.pro && current.length > 0 && (
-            <p className="px-1 text-center text-xs text-fg-3">
-              {current.length}/{FREE_GOAL_LIMIT} free goals used ·{" "}
-              <button type="button" onClick={() => openSheet({ type: "paywall" })} className="font-semibold text-accent-2">
-                Go unlimited
-              </button>
-            </p>
           )}
           {achieved.length > 0 && (
             <>
