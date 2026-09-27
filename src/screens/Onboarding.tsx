@@ -8,7 +8,7 @@ import { AREAS, COLORS, GOAL_TEMPLATES, QUICK_HABITS, type HabitTemplate } from 
 import { goalFromTemplate, habitFromTemplate, useStore } from "../lib/store";
 
 const BLOCKERS = [
-  { id: "motivation", emoji: "🔋", label: "I lose motivation after a few days", answer: "Motivation fades — systems don't. Your habits are linked to goals so you always see why they matter, and your Agent steps in when you start slipping." },
+  { id: "motivation", emoji: "🔋", label: "I lose motivation after a few days", answer: "Motivation fades — systems don't. Your habits are linked to goals so you always see why they matter, and suggestions step in when you start slipping." },
   { id: "perfection", emoji: "💔", label: "One missed day and I give up", answer: "That's why there are no fragile streaks here. The Locked-In Score only asks for 70% of your habits — precision over perfection." },
   { id: "overwhelm", emoji: "🌀", label: "I set too many goals at once", answer: "We'll start with one goal and 1–3 small daily actions. Focus compounds faster than ambition." },
   { id: "tracking", emoji: "🧭", label: "I can't tell if I'm making progress", answer: "Your Focus Score, precision rates and goal pace show exactly where you stand — every single day." },
@@ -78,7 +78,7 @@ export function Onboarding() {
                     ["🎯", "Set SMART goals and break them into milestones"],
                     ["🔗", "Link daily habits that actually move them"],
                     ["📈", "See your Focus Score and patterns every day"],
-                    ["🤖", "An AI Agent that keeps you locked in"],
+                    ["🔒", "Stay locked in with precision, not perfection"],
                   ].map(([e, t]) => (
                     <div key={t} className="flex items-center gap-3">
                       <span className="grid h-9 w-9 place-items-center rounded-xl bg-card text-lg">{e}</span>
@@ -105,7 +105,7 @@ export function Onboarding() {
           )}
 
           {step === 1 && (
-            <Step title="What should we call you?" sub="Your Agent will use it to keep things personal.">
+            <Step title="What should we call you?" sub="We'll keep things personal.">
               <input autoFocus className={cx(inputCls, "text-lg")} value={name} onChange={(e) => setName(e.target.value)} placeholder="Your first name" onKeyDown={(e) => e.key === "Enter" && canNext && next()} />
             </Step>
           )}
@@ -132,7 +132,7 @@ export function Onboarding() {
           )}
 
           {step === 3 && (
-            <Step title="What usually stops you?" sub="Be honest — this shapes how your Agent coaches you.">
+            <Step title="What usually stops you?" sub="Be honest — there's a system for every one of these.">
               <div className="space-y-2.5">
                 {BLOCKERS.map((b) => (
                   <button

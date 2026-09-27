@@ -8,7 +8,6 @@ export type Route =
   | { name: "today" }
   | { name: "goals"; tab?: "goals" | "habits" }
   | { name: "insights" }
-  | { name: "coach"; prompt?: string }
   | { name: "profile" }
   | { name: "goal"; id: ID }
   | { name: "habit"; id: ID }
@@ -28,8 +27,6 @@ export function parseHash(hash: string): Route {
       return { name: "goals", tab: q.get("tab") === "habits" ? "habits" : "goals" };
     case "insights":
       return { name: "insights" };
-    case "coach":
-      return { name: "coach", prompt: q.get("q") ?? undefined };
     case "profile":
       return { name: "profile" };
     case "goal":
@@ -55,8 +52,6 @@ export function href(r: Route): string {
   switch (r.name) {
     case "goals":
       return r.tab === "habits" ? "#/goals?tab=habits" : "#/goals";
-    case "coach":
-      return r.prompt ? `#/coach?q=${encodeURIComponent(r.prompt)}` : "#/coach";
     case "goal":
       return `#/goal/${r.id}`;
     case "habit":

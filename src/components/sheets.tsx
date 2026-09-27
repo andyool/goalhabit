@@ -541,7 +541,7 @@ function GoalForm({ id, onDone }: { id?: string; onDone: () => void }) {
         </div>
       </Field>
 
-      <Field label="Relevant — why does this matter to you?" hint="Phrase it as who you're becoming. Your Agent uses this to keep you motivated.">
+      <Field label="Relevant — why does this matter to you?" hint="Phrase it as who you're becoming — it keeps you going on hard days.">
         <textarea className={cx(inputCls, "min-h-20 resize-none")} value={why} onChange={(e) => setWhy(e.target.value)} placeholder="I want to become someone who…" />
       </Field>
 

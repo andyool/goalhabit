@@ -1,7 +1,6 @@
 /**
- * The on-device "agent": rule-based analysis that turns stats into patterns,
- * trends and one-tap actions. Works without an API key; the Claude coach
- * builds on top of it.
+ * Rule-based analysis that turns stats into patterns, trends and one-tap
+ * suggestions. Plain heuristics — no AI involved.
  */
 import { addDays, diffDays, startOfWeek, todayKey, weekdayIndex, WEEKDAYS_LONG, type DateKey } from "./date";
 import {
@@ -338,58 +337,3 @@ export function deepAnalysis(state: AppState, today: DateKey = todayKey()): Anal
   return { trends, patterns, tips };
 }
 
-/** Compact JSON snapshot for the AI coach. */
-export function coachContext(state: AppState, today: DateKey = todayKey()) {
-  const habits = activeHabits(state.habits);
-  const y = addDays(today, -1);
-  return {
-    today,
-    weekday: WEEKDAYS_LONG[weekdayIndex(today)],
-    user: { name: state.profile.name, focusAreas: state.profile.areas },
-    focusScore: {
-      last7Avg: averageFocus(state.habits, state.logs, addDays(today, -6), today),
-      prev7Avg: averageFocus(state.habits, state.logs, addDays(today, -13), addDays(today, -7)),
-    },
-    todayProgress: dayStats(state.habits, state.logs, today),
-    habits: habits.map((h) => ({
-      id: h.id,
-      name: h.name,
-      target: targetOn(h, today),
-      unit: h.unit,
-      schedule: h.schedule,
-      timeOfDay: h.timeOfDay,
-      linkedGoalId: h.goalId ?? null,
-      improvementMode: h.improvementMode,
-      loggedToday: state.logs[today]?.[h.id]?.value ?? 0,
-      precision14d: round2(precisionRate(h, state.logs, addDays(today, -14), y)),
-      precision30d: round2(precisionRate(h, state.logs, addDays(today, -30), y)),
-    })),
-    goals: activeGoals(state.goals).map((g) => {
-      const progress = goalProgress(g, state.habits, state.logs, today);
-      const pace = goalPace(g, progress, today);
-      return {
-        id: g.id,
-        title: g.title,
-        why: g.why,
-        kind: g.kind,
-        current: g.kind === "numeric" ? goalCurrent(g, state.habits, state.logs, today) : undefined,
-        target: g.kind === "numeric" ? g.targetValue : undefined,
-        unit: g.unit || undefined,
-        progress: round2(progress),
-        expectedProgress: round2(pace.expected),
-        status: pace.status,
-        deadline: g.deadline ?? null,
-        milestones: g.milestones.map((m) => ({ id: m.id, title: m.title, done: m.done, dueDate: m.dueDate ?? null })),
-      };
-    }),
-    recentCheckIns: Object.entries(state.checkIns)
-      .filter(([d]) => d >= addDays(today, -7))
-      .map(([date, c]) => ({ date, ...c })),
-    lastReview: state.reviews.at(-1) ?? null,
-    agentFindings: buildSuggestions(state, today).map((s) => `${s.title}: ${s.body}`),
-  };
-}
-
-function round2(v: number | null) {
-  return v === null ? null : Math.round(v * 100) / 100;
-}

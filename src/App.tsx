@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from "motion/react";
-import { ChartColumn, House, Sparkles, Target, User } from "lucide-react";
+import { ChartColumn, House, Target, User } from "lucide-react";
 import { useEffect, type ReactNode } from "react";
 import { Sheets } from "./components/sheets";
 import { cx, Toasts } from "./components/ui";
@@ -10,7 +10,6 @@ import { useStore } from "./lib/store";
 import { navigate, useRoute, type Route } from "./lib/ui";
 import { ArchiveScreen, Goals } from "./screens/Goals";
 import { Challenges } from "./screens/Challenges";
-import { Coach } from "./screens/Coach";
 import { GoalDetail } from "./screens/GoalDetail";
 import { HabitDetail } from "./screens/HabitDetail";
 import { Insights } from "./screens/Insights";
@@ -21,13 +20,12 @@ import { Review } from "./screens/Review";
 import { Settings } from "./screens/Settings";
 import { Today } from "./screens/Today";
 
-type Tab = "today" | "goals" | "insights" | "coach" | "profile";
+type Tab = "today" | "goals" | "insights" | "profile";
 
 const TABS: { id: Tab; label: string; icon: typeof House }[] = [
   { id: "today", label: "Today", icon: House },
   { id: "goals", label: "Plan", icon: Target },
   { id: "insights", label: "Insights", icon: ChartColumn },
-  { id: "coach", label: "Agent", icon: Sparkles },
   { id: "profile", label: "Profile", icon: User },
 ];
 
@@ -40,8 +38,6 @@ function tabFor(r: Route): Tab {
       return "goals";
     case "insights":
       return "insights";
-    case "coach":
-      return "coach";
     case "profile":
     case "review":
     case "challenges":
@@ -81,8 +77,6 @@ function Screen({ route }: { route: Route }): ReactNode {
       return <HabitDetail id={route.id} />;
     case "insights":
       return <Insights />;
-    case "coach":
-      return <Coach prompt={route.prompt} />;
     case "profile":
       return <Profile />;
     case "review":
@@ -155,7 +149,7 @@ export default function App() {
 
       {/* Mobile tab bar */}
       <nav className="safe-bottom fixed inset-x-0 bottom-0 z-40 border-t border-line-soft bg-bg/85 backdrop-blur-xl md:hidden">
-        <div className="mx-auto grid max-w-xl grid-cols-5">
+        <div className="mx-auto grid max-w-xl grid-cols-4">
           {TABS.map(({ id, label, icon: Icon }) => (
             <button key={id} type="button" onClick={() => go(id)} className={cx("relative flex flex-col items-center gap-1 pb-2 pt-2.5 text-[10.5px] font-semibold transition", tab === id ? "text-fg" : "text-fg-3")}>
               {tab === id && <motion.span layoutId="tab-indicator" className="absolute top-0 h-0.5 w-8 rounded-full bg-accent" />}

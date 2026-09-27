@@ -3,9 +3,7 @@ import { persist } from "zustand/middleware";
 import { addDays, diffDays, fromKey, todayKey, type DateKey } from "./date";
 import { CHALLENGES, type GoalTemplate, type HabitTemplate } from "./content";
 import { isScheduledOn, precisionRate, targetOn } from "./metrics";
-import type { AppState, CheckIn, ChatDisplayMessage, Goal, Habit, ID, Milestone, Profile, WeeklyReview } from "./types";
-
-export const DEFAULT_MODEL = "claude-opus-5";
+import type { AppState, CheckIn, Goal, Habit, ID, Milestone, Profile, WeeklyReview } from "./types";
 
 export function uid(): ID {
   if (typeof crypto !== "undefined" && "randomUUID" in crypto) return crypto.randomUUID().slice(0, 12);
@@ -17,8 +15,6 @@ const defaultProfile = (): Profile => ({
   areas: [],
   onboarded: false,
   theme: "dark",
-  apiKey: "",
-  model: DEFAULT_MODEL,
   remindersEnabled: false,
   offTrackAlerts: true,
   createdAt: todayKey(),
@@ -34,8 +30,6 @@ export const initialState = (): AppState => ({
   challenges: [],
   lessonsRead: [],
   dismissedSuggestions: [],
-  chat: [],
-  chatApi: [],
   activity: [],
 });
 
@@ -106,10 +100,6 @@ interface Actions {
   leaveChallenge: (templateId: ID) => void;
   markLessonRead: (id: ID) => void;
   dismissSuggestion: (key: string) => void;
-  pushChat: (m: Omit<ChatDisplayMessage, "id" | "at">) => ID;
-  patchChat: (id: ID, patch: Partial<ChatDisplayMessage>) => void;
-  setChatApi: (msgs: unknown[]) => void;
-  clearChat: () => void;
   logActivity: (text: string) => void;
   runImprovementMode: () => string[];
   loadDemo: () => void;
@@ -303,18 +293,6 @@ export const useStore = create<Store>()(
       markLessonRead: (id) => set((s) => (s.lessonsRead.includes(id) ? {} : { lessonsRead: [...s.lessonsRead, id] })),
 
       dismissSuggestion: (key) => set((s) => ({ dismissedSuggestions: [...s.dismissedSuggestions, key] })),
-
-      pushChat: (m) => {
-        const id = uid();
-        set((s) => ({ chat: [...s.chat, { ...m, id, at: Date.now() }].slice(-200) }));
-        return id;
-      },
-
-      patchChat: (id, patch) => set((s) => ({ chat: s.chat.map((m) => (m.id === id ? { ...m, ...patch } : m)) })),
-
-      setChatApi: (msgs) => set({ chatApi: msgs }),
-
-      clearChat: () => set({ chat: [], chatApi: [] }),
 
       logActivity: (text) => set((s) => ({ activity: [{ id: uid(), at: Date.now(), text }, ...s.activity].slice(0, 50) })),
 

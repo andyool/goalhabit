@@ -56,7 +56,7 @@ function tick() {
       return st === "off-track" || st === "overdue";
     });
     if (off.length && once(`${today}:offtrack`)) {
-      const text = off.length === 1 ? `${off[0].emoji} ${off[0].title} is off track. Your Agent has a fix.` : `${off.length} goals are off track. Your Agent has suggestions.`;
+      const text = off.length === 1 ? `${off[0].emoji} ${off[0].title} is off track. Open it to get back on pace.` : `${off.length} goals are off track. Check Insights for suggestions.`;
       toast(text, "warn");
       void notify(APP_NAME, text, "off-track");
     }

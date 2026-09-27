@@ -1,5 +1,5 @@
 import { motion } from "motion/react";
-import { Check, ChevronRight, Flame, Link2, Sparkles, X } from "lucide-react";
+import { Check, ChevronRight, Flame, Lightbulb, Link2, Sparkles, X } from "lucide-react";
 import { applySuggestion, fmtNum, scheduleLabel, toggleHabit } from "../lib/actions";
 import { COLORS } from "../lib/content";
 import { relativeDay, todayKey, type DateKey } from "../lib/date";
@@ -173,7 +173,7 @@ export function SuggestionCard({ s, compact }: { s: Suggestion; compact?: boolea
         <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-card-2 text-xl">{s.icon}</span>
         <div className="min-w-0 flex-1 pr-5">
           <div className="mb-0.5 flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-accent-2">
-            <Sparkles size={11} /> Agent
+            <Lightbulb size={11} /> Suggestion
           </div>
           <div className="font-semibold leading-snug">{s.title}</div>
           <p className={cx("mt-1 text-sm text-fg-2", compact && "line-clamp-2")}>{s.body}</p>

@@ -128,7 +128,7 @@ export function Today() {
         </div>
       </Card>
 
-      {/* Agent */}
+      {/* Suggestions */}
       {day === today && suggestions.length > 0 && (
         <div className="mt-4">
           <AnimatePresence mode="popLayout">
@@ -136,7 +136,7 @@ export function Today() {
           </AnimatePresence>
           {suggestions.length > 1 && (
             <button type="button" onClick={() => navigate({ name: "insights" })} className="mt-2 flex w-full items-center justify-center gap-1 py-1 text-xs font-semibold text-fg-3 hover:text-fg">
-              {suggestions.length - 1} more from your Agent <ChevronRight size={14} />
+              {suggestions.length - 1} more suggestions <ChevronRight size={14} />
             </button>
           )}
         </div>

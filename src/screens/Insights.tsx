@@ -1,9 +1,9 @@
 import { AnimatePresence } from "motion/react";
-import { Sparkles } from "lucide-react";
+import { Lightbulb } from "lucide-react";
 import { useState } from "react";
 import { BarChart, Heatmap, LineChart } from "../components/charts";
 import { HabitIcon, SuggestionCard } from "../components/items";
-import { Button, Card, EmptyState, PageHeader, ProgressBar, Segmented, SectionTitle, Stat } from "../components/ui";
+import { Card, EmptyState, PageHeader, ProgressBar, Segmented, SectionTitle, Stat } from "../components/ui";
 import { COLORS } from "../lib/content";
 import { addDays, rangeKeys, todayKey, WEEKDAYS_SHORT } from "../lib/date";
 import { activeHabits, buildSuggestions, deepAnalysis, type AnalysisItem } from "../lib/insights";
@@ -109,7 +109,7 @@ export function Insights() {
         <>
           <SectionTitle>
             <span className="flex items-center gap-1.5">
-              <Sparkles size={13} /> Agent actions
+              <Lightbulb size={13} /> Suggestions
             </span>
           </SectionTitle>
           <div className="space-y-3">
@@ -161,17 +161,6 @@ export function Insights() {
         <BarChart height={130} bars={hourBars} format={(v) => `${v} completions`} />
       </Card>
 
-      <Button
-        full
-        variant="soft"
-        size="lg"
-        className="mt-6"
-        onClick={() =>
-          navigate({ name: "coach", prompt: "Give me a deep analysis of my last 30 days: what's working, what's slipping, and the 3 highest-leverage changes. Apply the changes you're confident about." })
-        }
-      >
-        <Sparkles size={18} /> Ask your Agent for a full analysis
-      </Button>
     </div>
   );
 }

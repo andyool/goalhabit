@@ -6,7 +6,6 @@ import { requestNotificationPermission } from "../lib/notifications";
 import { snapshot, useStore } from "../lib/store";
 import type { AppState } from "../lib/types";
 import { navigate, toast } from "../lib/ui";
-import { ApiKeySetup } from "./Coach";
 
 function Label({ icon, children }: { icon: ReactNode; children: ReactNode }) {
   return (
@@ -23,7 +22,7 @@ export function Settings() {
   const fileRef = useRef<HTMLInputElement>(null);
 
   const exportData = () => {
-    const data = { ...snapshot(), profile: { ...profile, apiKey: "" } };
+    const data = snapshot();
     const blob = new Blob([JSON.stringify({ app: APP_NAME, version: 1, exportedAt: new Date().toISOString(), data }, null, 2)], { type: "application/json" });
     const a = document.createElement("a");
     a.href = URL.createObjectURL(blob);
@@ -39,7 +38,7 @@ export function Settings() {
       const data = (json.data ?? json) as AppState;
       if (!Array.isArray(data.habits) || !Array.isArray(data.goals) || typeof data.logs !== "object") throw new Error("Not a valid backup file");
       if (!confirm("Replace all current data with this backup?")) return;
-      state.importData({ ...data, profile: { ...data.profile, apiKey: profile.apiKey, onboarded: true } });
+      state.importData({ ...data, profile: { ...data.profile, onboarded: true } });
       toast("Backup restored", "good");
       navigate({ name: "today" }, { replace: true });
     } catch (e) {
@@ -111,16 +110,6 @@ export function Settings() {
       </List>
 
       <SectionTitle>
-        <Label icon={<Sparkles size={13} />}>AI Agent</Label>
-      </SectionTitle>
-      <ApiKeySetup compact />
-      {profile.apiKey && (
-        <button type="button" onClick={() => updateProfile({ apiKey: "" })} className="mt-2 w-full py-2 text-center text-sm font-medium text-bad">
-          Remove API key
-        </button>
-      )}
-
-      <SectionTitle>
         <Label icon={<Database size={13} />}>Data</Label>
       </SectionTitle>
       <List>
@@ -135,9 +124,8 @@ export function Settings() {
         <Row
           onClick={() => {
             if (!confirm("Load demo data? This replaces everything you have now.")) return;
-            const key = profile.apiKey;
             state.loadDemo();
-            updateProfile({ apiKey: key, theme: profile.theme });
+            updateProfile({ theme: profile.theme });
             toast("Demo data loaded", "good");
             navigate({ name: "today" }, { replace: true });
           }}

@@ -1,4 +1,4 @@
-import { Archive, Check, Pencil, Plus, Sparkles, Trash, Trophy, X } from "lucide-react";
+import { Archive, Check, Pencil, Plus, Trash, Trophy, X } from "lucide-react";
 import { useMemo, useState } from "react";
 import { LineChart } from "../components/charts";
 import { HabitIcon, PACE_META, useGoalStats } from "../components/items";
@@ -131,21 +131,11 @@ function GoalView({ goalId }: { goalId: string }) {
             {goal.completedAt && <div className="text-xs text-good">Achieved {relativeDay(goal.completedAt)} 🏆</div>}
           </div>
         </div>
-        <div className="mt-4 grid grid-cols-2 gap-2">
-          {goal.kind === "numeric" && !goal.completedAt && (
-            <Button variant="soft" size="sm" onClick={() => openSheet({ type: "goalEntry", goalId: goal.id })}>
-              <Plus size={15} /> Log progress
-            </Button>
-          )}
-          <Button
-            variant="secondary"
-            size="sm"
-            className={goal.kind !== "numeric" || goal.completedAt ? "col-span-2" : ""}
-            onClick={() => navigate({ name: "coach", prompt: `Review my goal "${goal.title}" (id ${goal.id}). Am I on track, and what should I change this week?` })}
-          >
-            <Sparkles size={15} /> Ask Agent
+        {goal.kind === "numeric" && !goal.completedAt && (
+          <Button variant="soft" size="sm" full className="mt-4" onClick={() => openSheet({ type: "goalEntry", goalId: goal.id })}>
+            <Plus size={15} /> Log progress
           </Button>
-        </div>
+        )}
       </Card>
 
       {series && series.length > 1 && (

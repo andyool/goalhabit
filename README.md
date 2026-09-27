@@ -1,6 +1,6 @@
 # GoalHabit
 
-A discipline app for goals and habits, modelled on [Pattrn](https://pattrn.io). You set SMART goals, link them to daily habits, and track how consistent you are. Scores include a daily **Focus Score**, a **Precision Rate** for each habit and a **Locked-In Score**. An AI **Agent** runs on Claude and can plan and adjust your system for you.
+A discipline app for goals and habits, modelled on [Pattrn](https://pattrn.io). You set SMART goals, link them to daily habits, and track how consistent you are. Scores include a daily **Focus Score**, a **Precision Rate** for each habit and a **Locked-In Score**.
 
 It's a mobile-first installable web app (PWA). All data stays on the device.
 
@@ -8,11 +8,10 @@ It's a mobile-first installable web app (PWA). All data stays on the device.
 
 | Area | What you get |
 | --- | --- |
-| **Today** | Week strip with a daily completion ring; Focus Score hero; live Locked-In timer (days, hours, minutes); habits grouped by time of day with one-tap check-off or amount logging; mood and energy check-in; top Agent suggestion; goals carousel |
+| **Today** | Week strip with a daily completion ring; Focus Score hero; live Locked-In timer (days, hours, minutes); habits grouped by time of day with one-tap check-off or amount logging; mood and energy check-in; top suggestion; goals carousel |
 | **Goals** | SMART goal builder with templates and a live S/M/A/R/T checklist; numeric goals (cumulative, or measurement such as body weight) or milestone goals; deadlines, pace tracking (on track / behind / off track / overdue), projected finish date, progress chart, progress log |
 | **Habits** | Daily, specific weekdays, or flexible N× per week; amount targets with units; unit linking so logged amounts count toward a goal; reminders; **Improvement Mode**, which scales targets up after a week at 90% or better and down after a week under 50%; streaks, heatmap, 14-day and weekday charts, target history |
-| **Insights** | Focus Score trend, blue consistency heatmap, precision ranking, Agent actions (one-tap fixes), Deep Analysis (trends, patterns, tips), best weekdays, peak hours, mood/energy correlations |
-| **Agent** | Chat with Claude, which can see your stats and act through tools: create goals and habits, change targets and schedules, add or complete milestones, log progress |
+| **Insights** | Focus Score trend, blue consistency heatmap, precision ranking, rule-based suggestions (one-tap fixes), Deep Analysis (trends, patterns, tips), best weekdays, peak hours, mood/energy correlations |
 | **Growth** | Weekly review ritual, challenges (75 Soft, Monk Mode, 5AM Club and more), lessons on discipline, XP and levels, activity feed |
 | **App** | Dark and light themes, desktop sidebar layout, offline service worker, notifications, JSON export/import, demo data |
 
@@ -34,17 +33,15 @@ npm run build      # production build in dist/
 
 On first launch, go through onboarding, or choose **Explore with demo data** to get 70 days of realistic history.
 
-### AI Agent
-
-Every feature is available from the start, with no plans or paywall. The Agent only needs an Anthropic API key. Add the key in **Settings → AI Agent** or on the Agent tab. The key is stored only in the browser and requests go directly to the Anthropic API. The default model is Claude Opus 5, and you can switch to Sonnet 5 or Haiku 4.5.
+Every feature is available from the start — no plans, no paywall, no AI, no accounts.
 
 ## Project structure
 
 ```
 src/
-  lib/          data model, store (zustand + localStorage), scoring engine, insights/agent rules, Claude client
+  lib/          data model, store (zustand + localStorage), scoring engine, insight and suggestion rules
   components/   UI kit, charts (SVG), list items, bottom sheets (forms, logging)
-  screens/      Today, Goals, GoalDetail, HabitDetail, Insights, Coach, Profile, Review, Challenges, Learn, Settings, Onboarding
+  screens/      Today, Goals, GoalDetail, HabitDetail, Insights, Profile, Review, Challenges, Learn, Settings, Onboarding
 public/         PWA manifest, service worker, icons
 ```
 

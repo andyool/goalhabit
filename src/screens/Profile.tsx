@@ -78,7 +78,7 @@ export function Profile() {
 
       <SectionTitle>App</SectionTitle>
       <List>
-        <MenuRow icon={<Settings size={18} />} label="Settings" sub="Theme, reminders, AI, data" onClick={() => navigate({ name: "settings" })} />
+        <MenuRow icon={<Settings size={18} />} label="Settings" sub="Theme, reminders, data" onClick={() => navigate({ name: "settings" })} />
         <MenuRow icon={<Archive size={18} />} label="Archive" onClick={() => navigate({ name: "archive" })} />
       </List>
 

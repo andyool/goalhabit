@@ -124,20 +124,9 @@ export interface Profile {
   areas: string[];
   onboarded: boolean;
   theme: "dark" | "light" | "system";
-  apiKey: string;
-  model: string;
   remindersEnabled: boolean;
   offTrackAlerts: boolean;
   createdAt: DateKey;
-}
-
-export interface ChatDisplayMessage {
-  id: ID;
-  role: "user" | "assistant";
-  text: string;
-  actions?: string[];
-  error?: boolean;
-  at: number;
 }
 
 export interface AppState {
@@ -150,8 +139,5 @@ export interface AppState {
   challenges: JoinedChallenge[];
   lessonsRead: ID[];
   dismissedSuggestions: string[];
-  chat: ChatDisplayMessage[];
-  /** Raw API conversation (content blocks), kept so the coach remembers context. */
-  chatApi: unknown[];
   activity: { id: ID; at: number; text: string }[];
 }

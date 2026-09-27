@@ -1,7 +1,7 @@
 {
   "name": "GoalHabit",
   "short_name": "GoalHabit",
-  "description": "Discipline tracker: SMART goals, habits, Focus Score and an AI Agent.",
+  "description": "Discipline tracker: SMART goals, habits, Focus Score and insights.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
